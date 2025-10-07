@@ -10,10 +10,7 @@ df = pd.read_csv(raw_path)
 print("✅ Raw data loaded:", df.shape)
 
 print("🧹 Cleaning data...")
-# drop junk columns (e.g., Unnamed)
 df = df.loc[:, ~df.columns.str.contains(r"^Unnamed")]
-
-# snake_case columns
 df.columns = (
     df.columns.str.strip()
     .str.replace(" ", "_")
@@ -22,23 +19,19 @@ df.columns = (
     .str.lower()
 )
 
-# trim object columns
 for c in df.select_dtypes(include="object").columns:
     df[c] = df[c].astype(str).str.strip()
 
-# map target
 if "attrition_flag" in df.columns:
     df["churn_flag"] = df["attrition_flag"].map({
         "Attrited Customer": 1,
         "Existing Customer": 0
     }).astype("Int64")
 
-# normalise Unknowns to NaN (helps with filtering in BI tools)
 for col in ["education_level", "income_category", "marital_status"]:
     if col in df.columns:
         df[col] = df[col].replace({"Unknown": pd.NA, "unknown": pd.NA})
 
-# type fixes
 int_like = [
     "dependent_count","months_on_book","months_inactive_12_mon",
     "contacts_count_12_mon","total_relationship_count","total_trans_ct"
@@ -55,7 +48,6 @@ for c in float_like:
     if c in df.columns:
         df[c] = pd.to_numeric(df[c], errors="coerce")
 
-# engineered features (simple, useful for dashboards/models)
 if {"total_trans_amt","total_trans_ct"}.issubset(df.columns):
     df["avg_transaction"] = df["total_trans_amt"] / df["total_trans_ct"].replace(0, pd.NA)
 
@@ -68,13 +60,11 @@ elif {"avg_open_to_buy","total_revolving_bal"}.issubset(df.columns):
     denom = df["avg_open_to_buy"] + df["total_revolving_bal"]
     df["utilization"] = df["total_revolving_bal"] / denom.replace(0, pd.NA)
 
-# remove exact duplicates
 before = len(df)
 df = df.drop_duplicates()
 removed = before - len(df)
 print(f"🧽 Duplicates removed: {removed}")
 
-# save improved cleaned file
 out_clean = processed_dir / "cleaned.csv"
 df.to_csv(out_clean, index=False)
 print(f"💾 Saved improved cleaned data → {out_clean}")
