@@ -5,7 +5,10 @@ env.py
 __pycache__/
 *.py[cod]
 node_modules/
-.github/
+.github/*
+!.github/workflows/
 cloudinary_python.txt
 kaggle.json
 .venv/
+.ruff_cache/
+.claude/

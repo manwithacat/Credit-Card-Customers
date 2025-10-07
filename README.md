@@ -1,72 +1,241 @@
-# ![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Credit Card Customer Churn Analysis
 
-## Template Instructions
+A professional data science project analyzing credit card customer attrition patterns using machine learning and interactive Streamlit dashboards.
 
-Welcome,
+## Project Overview
 
-This is the Code Institute student template for the Data Analytics capstone project. We have preinstalled all of the tools you need to get started. It's perfectly okay to use this template as the basis for your project submissions. Click the `Use this template` button above to get started.
+This project analyzes credit card customer data to identify patterns and predict customer churn. The analysis follows industry-standard data science workflows, demonstrating best practices in data engineering, exploratory analysis, feature engineering, model development, and deployment.
 
-You can safely delete the Template Instructions section of this README.md file and modify the remaining paragraphs for your own project. Please do read the Template Instructions at least once, though! It contains some important information about the IDE and the extensions we use.
+**Dataset**: [Credit Card Customers](https://www.kaggle.com/datasets/sakshigoyal7/credit-card-customers) from Kaggle
 
-## How to use this repo
+**Key Objectives**:
+- Understand customer attrition patterns and drivers
+- Build predictive models for customer churn
+- Deliver insights through interactive dashboards
+- Demonstrate production-ready MLOps practices
 
-1. Use this template to create your GitHub project repo. Click the **Use this template** button, then click **Create a new repository**.
+## Project Structure
 
-1. Copy the URL of your repository to your clipboard.
-
-1. In VS Code, select **File** -> **Open Folder**.
-
-1. Select your `vscode-projects` folder, then click the **Select Folder** button on Windows, or the **Open** button on Mac.
-
-1. From the top menu in VS Code, select **Terminal** > **New Terminal** to open the terminal.
-
-1. In the terminal, type `git clone` followed by the URL of your GitHub repository. Then hit **Enter**. This command will download all the files in your GitHub repository into your vscode-projects folder.
-
-1. In VS Code, select **File** > **Open Folder** again.
-
-1. This time, navigate to and select the folder for the project you just downloaded. Then, click **Select Folder**.
-
-1. A virtual environment is necessary when working with Python projects to ensure each project's dependencies are kept separate from each other. You need to create your virtual environment, also called a venv, and then ensure that it is activated any time you return to your workspace.
-Click the gear icon in the lower left-hand corner of the screen to open the Manage menu and select **Command Palette** to open the VS Code command palette.
-
-1. In the command palette, type: *create environment* and select **Python: Create Environment…**
-
-1. Choose **Venv** from the dropdown list.
-
-1. Choose the Python version you installed earlier. Currently, we recommend Python 3.12.8
-
-1. **DO NOT** click the box next to `requirements.txt`, as you need to do more steps before you can install your dependencies. Click **OK**.
-
-1. You will see a `.venv` folder appear in the file explorer pane to show that the virtual environment has been created.
-
-1. **Important**: Note that the `.venv` folder is in the `.gitignore` file so that Git won't track it.
-
-1. Return to the terminal by clicking on the TERMINAL tab, or click on the **Terminal** menu and choose **New Terminal** if no terminal is currently open.
-
-1. In the terminal, use the command below to install your dependencies. This may take several minutes.
-
- ```console
- pip3 install -r requirements.txt
- ```
-
-1. Open the `jupyter_notebooks` directory, and click on the notebook you want to open.
-
-1. Click the **kernel** button and choose **Python Environments**.
-
-Note that the kernel says `Python 3.12.8` as it inherits from the venv, so it will be Python-3.12.8 if that is what is installed on your PC. To confirm this, you can use the command below in a notebook code cell.
-
-```console
-! python --version
+```
+├── .github/
+│   └── workflows/          # CI/CD pipelines
+├── data/
+│   ├── raw/               # Raw data from Kaggle
+│   ├── processed/         # Cleaned and transformed data
+│   └── model/             # Trained model artifacts
+├── jupyter_notebooks/
+│   ├── 01_extract.ipynb   # Data ingestion and validation
+│   ├── 02_eda.ipynb       # [TODO] Exploratory data analysis
+│   ├── 03_feature_engineering.ipynb  # [TODO] Feature creation
+│   └── 04_modeling.ipynb  # [TODO] Model training and evaluation
+├── src/
+│   ├── data/              # [TODO] Data processing modules
+│   ├── features/          # [TODO] Feature engineering
+│   ├── models/            # [TODO] Model training and prediction
+│   └── visualization/     # [TODO] Plotting utilities
+├── app.py                 # Streamlit dashboard application
+├── ingest.py             # Kaggle data download script
+├── requirements.txt       # Python dependencies
+├── Makefile              # Development automation
+└── README.md             # Project documentation
 ```
 
-## Deployment Reminders
+## Features
 
-* Set the `.python-version` Python version to a [Heroku-22](https://devcenter.heroku.com/articles/python-support#supported-runtimes) stack currently supported version that closest matches what you used in this project.
-* The project can be deployed to Heroku using the following steps.
+- **Automated Data Ingestion**: Direct download from Kaggle API
+- **Reproducible Analysis**: Jupyter notebooks with clear workflow
+- **Interactive Dashboards**: Streamlit-based visualization
+- **MLOps Best Practices**: Version control, testing, CI/CD
+- **Production Ready**: Containerized deployment with Heroku/Streamlit Cloud
 
-1. Log in to Heroku and create an App
-2. At the **Deploy** tab, select **GitHub** as the deployment method.
-3. Select your repository name and click **Search**. Once it is found, click **Connect**.
-4. Select the branch you want to deploy, then click **Deploy Branch**.
-5. The deployment process should happen smoothly if all deployment files are fully functional. Click the button **Open App** at the top of the page to access your App.
-6. If the slug size is too large, then add large files not required for the app to the `.slugignore` file.
+## Setup Instructions
+
+### Prerequisites
+
+- Python 3.12.8 or compatible version
+- Kaggle API credentials (see [Kaggle API Setup](#kaggle-api-setup))
+- Git for version control
+
+### Local Development Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd Credit-Card-Customers
+   ```
+
+2. **Create and activate virtual environment**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Download dataset**
+   ```bash
+   python ingest.py
+   ```
+
+5. **Launch Jupyter notebooks**
+   ```bash
+   jupyter notebook
+   ```
+
+6. **Run Streamlit dashboard** *(after model development)*
+   ```bash
+   streamlit run app.py
+   ```
+
+### Kaggle API Setup
+
+1. Create a Kaggle account at [kaggle.com](https://www.kaggle.com)
+2. Navigate to Account Settings → API → Create New API Token
+3. Download `kaggle.json` and place it in `~/.kaggle/` directory
+4. Set permissions: `chmod 600 ~/.kaggle/kaggle.json`
+
+## Development Workflow
+
+### Data Pipeline
+
+```mermaid
+graph LR
+    A[Kaggle API] --> B[Raw Data]
+    B --> C[Data Validation]
+    C --> D[Feature Engineering]
+    D --> E[Model Training]
+    E --> F[Model Evaluation]
+    F --> G[Deployment]
+```
+
+### Make Commands
+
+```bash
+make install      # Install dependencies
+make lint         # Run Ruff linting
+make format       # Run Black code formatting
+make nbstrip      # Strip notebook outputs
+make pre-commit   # Run lint + format + nbstrip (recommended before commits)
+make app          # Run Streamlit dashboard
+make clean        # Remove caches and temp files
+```
+
+### DevOps Tools
+
+**Code Quality**
+- **Ruff**: Fast Python linter for code quality and style enforcement
+- **Black**: Opinionated code formatter for consistent style across the project
+
+**Notebook Management**
+- **nbstripout**: Strips output cells and metadata from Jupyter notebooks before commit
+  - Prevents binary bloat in Git repository (images, plots, execution metadata)
+  - Keeps version control focused on code changes, not outputs
+  - Reduces merge conflicts in collaborative environments
+  - Automatically validated via GitHub Actions on every PR
+- **nbdime**: Notebook-aware diffing and merging tool
+  - Provides human-readable diffs of notebook structure and code
+  - Integrates with Git to show semantic changes (not JSON noise)
+  - Web-based diff viewer: `nbdiff-web notebook.ipynb`
+  - Enable Git integration: `nbdime config-git --enable`
+
+**CI/CD Pipeline**
+- GitHub Actions workflow validates notebooks are stripped before merge
+- Ensures all commits maintain clean notebook hygiene
+- Run `make pre-commit` before committing to pass all checks
+
+## Methodology
+
+### 1. Data Ingestion (`ingest.py`)
+- Automated download from Kaggle
+- Schema validation and type enforcement
+- Data dictionary parsing for metadata
+
+### 2. Exploratory Data Analysis (`02_eda.ipynb`) [TODO]
+- Distribution analysis
+- Missing data assessment
+- Correlation and feature relationships
+- Customer segmentation
+
+### 3. Feature Engineering (`03_feature_engineering.ipynb`) [TODO]
+- Derived features from transaction patterns
+- Encoding categorical variables
+- Scaling and normalization
+- Feature selection
+
+### 4. Model Development (`04_modeling.ipynb`) [TODO]
+- Baseline model establishment
+- Algorithm comparison (Logistic Regression, Random Forest, XGBoost)
+- Hyperparameter tuning
+- Cross-validation and performance metrics
+- Model interpretation (SHAP values)
+
+### 5. Dashboard Application (`app.py`) [TODO]
+- Customer overview and KPIs
+- Churn prediction interface
+- Feature importance visualization
+- Model performance metrics
+- Interactive filtering and segmentation
+
+## Deployment
+
+### Streamlit Cloud
+1. Connect GitHub repository to Streamlit Cloud
+2. Configure secrets for API keys
+3. Deploy with auto-reload on commits
+
+### Heroku (Alternative)
+```bash
+git push heroku main
+```
+
+**Requirements**:
+- `Procfile`: Web process configuration
+- `.python-version`: Python runtime specification
+- Environment variables for credentials
+
+## Technology Stack
+
+- **Data Processing**: pandas, numpy
+- **Machine Learning**: scikit-learn, xgboost
+- **Visualization**: matplotlib, seaborn, plotly
+- **Dashboard**: Streamlit
+- **Data Source**: Kaggle API (kagglehub)
+- **Version Control**: Git, GitHub
+- **Deployment**: Streamlit Cloud / Heroku
+
+## Key Metrics [TODO]
+
+| Metric | Target | Current |
+|--------|--------|---------|
+| Model Accuracy | >85% | TBD |
+| Precision (Churn) | >80% | TBD |
+| Recall (Churn) | >75% | TBD |
+| F1-Score | >0.80 | TBD |
+
+## Roadmap
+
+- [x] Project initialization
+- [x] Data ingestion pipeline
+- [ ] Exploratory data analysis
+- [ ] Feature engineering
+- [ ] Model training and evaluation
+- [ ] Streamlit dashboard development
+- [ ] CI/CD pipeline setup
+- [ ] Production deployment
+- [ ] Model monitoring and retraining
+
+## Contributing
+
+This is a pedagogical project following professional data science standards. Contributions welcome via pull requests.
+
+## License
+
+This project is for educational purposes.
+
+## Acknowledgments
+
+- Dataset: [Sakshi Goyal](https://www.kaggle.com/sakshigoyal7) via Kaggle
+- Framework: Code Institute Data Analytics template

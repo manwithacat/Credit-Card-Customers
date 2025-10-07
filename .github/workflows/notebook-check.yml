@@ -1,0 +1,44 @@
+name: Notebook Check
+
+on:
+  pull_request:
+    paths:
+      - 'jupyter_notebooks/**/*.ipynb'
+  push:
+    branches:
+      - main
+    paths:
+      - 'jupyter_notebooks/**/*.ipynb'
+
+jobs:
+  check-notebooks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install nbstripout
+        run: |
+          pip install nbstripout
+
+      - name: Check notebooks are stripped
+        run: |
+          # Run nbstripout in dry-run mode to check if notebooks have outputs
+          nbstripout --dry-run jupyter_notebooks/*.ipynb
+
+          # Check if any notebooks would be modified
+          if ! git diff --exit-code jupyter_notebooks/*.ipynb; then
+            echo "❌ Error: Notebooks contain outputs or metadata that should be stripped"
+            echo "Please run 'make nbstrip' before committing"
+            exit 1
+          fi
+
+      - name: Success
+        run: |
+          echo "✅ All notebooks are properly stripped"
