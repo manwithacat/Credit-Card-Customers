@@ -91,8 +91,8 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
                     # Scores and ratios: 2 decimal places with commas
                     formatted_stats[col] = formatted_stats[col].apply(lambda x: f"{x:,.2f}")
                 elif any(keyword in col_lower for keyword in ['amount', 'amt', 'limit', 'balance', 'revolving']):
-                    # Dollar amounts: whole numbers with commas
-                    formatted_stats[col] = formatted_stats[col].apply(lambda x: f"{x:,.0f}")
+                    # Dollar amounts: whole numbers with commas and USD symbol
+                    formatted_stats[col] = formatted_stats[col].apply(lambda x: f"${x:,.0f}")
                 elif any(keyword in col_lower for keyword in ['count', 'ct', 'months', 'tenure', 'inactive', 'contacts']):
                     # Counts and time periods: whole numbers with commas
                     formatted_stats[col] = formatted_stats[col].apply(lambda x: f"{x:,.0f}")
