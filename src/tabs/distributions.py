@@ -82,7 +82,8 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
 
             # Format for appropriate precision based on feature type
             # Iterate through each column and apply appropriate rounding and formatting
-            formatted_stats = stats_df.copy()
+            # Convert to object dtype to allow string formatting
+            formatted_stats = stats_df.astype(object)
             for col in formatted_stats.columns:
                 col_lower = col.lower()
 
@@ -91,7 +92,7 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
 
                 # Format each row
                 for idx in formatted_stats.index:
-                    val = formatted_stats.loc[idx, col]
+                    val = stats_df.loc[idx, col]  # Get original numeric value
 
                     # Count row should never have currency symbols
                     if idx == 'count':
