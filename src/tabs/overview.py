@@ -39,7 +39,9 @@ def render_overview_tab(filtered_df, churn_col, churn_colors=None):
 
     with col2:
         # .columns gives us the number of columns (features) in our dataframe
-        st.metric("Total Features", len(filtered_df.columns))
+        # Exclude naive_bayes columns from count
+        feature_count = len([col for col in filtered_df.columns if 'naive_bayes' not in col.lower()])
+        st.metric("Total Features", feature_count)
 
     with col3:
         if churn_col and churn_col in filtered_df.columns:
@@ -70,26 +72,30 @@ def render_overview_tab(filtered_df, churn_col, churn_colors=None):
     # DATA PREVIEW - Show first 100 rows
     # -------------------------------------------------------------------------
     st.subheader("Sample Data")
+    # Filter out naive_bayes columns from display (synthetic features not useful for analysis)
+    display_cols = [col for col in filtered_df.columns if 'naive_bayes' not in col.lower()]
     # st.dataframe() creates an interactive table that users can scroll and sort
     # .head(100) gets the first 100 rows
     # width="stretch" makes the table expand to fill available width
-    st.dataframe(filtered_df.head(100), width="stretch")
+    st.dataframe(filtered_df[display_cols].head(100), width="stretch")
 
     # -------------------------------------------------------------------------
     # DATA TYPES TABLE - Show column info and missing values
     # -------------------------------------------------------------------------
     st.subheader("Data Types")
+    # Filter out naive_bayes columns from data types display as well
+    filtered_for_types = filtered_df[display_cols]
     # Create a new DataFrame that summarizes information about our data
     # This is a dictionary where keys become column names
     dtype_df = pd.DataFrame(
         {
-            "Column": filtered_df.dtypes.index,  # Column names
-            "Type": filtered_df.dtypes.values.astype(
+            "Column": filtered_for_types.dtypes.index,  # Column names
+            "Type": filtered_for_types.dtypes.values.astype(
                 str
             ),  # Data types (int, float, object, etc.)
-            "Non-Null": filtered_df.count().values,  # Number of non-missing values
+            "Non-Null": filtered_for_types.count().values,  # Number of non-missing values
             "Null %": (
-                (1 - filtered_df.count() / len(filtered_df)) * 100
+                (1 - filtered_for_types.count() / len(filtered_for_types)) * 100
             )
             .round(2)
             .values,  # % missing
