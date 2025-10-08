@@ -42,10 +42,10 @@ from src.tabs import (
 # COLOR SCHEME CONFIGURATION
 # ============================================================================
 # Semantic color mapping for churn status visualization
-# Green = good (customer retained), Red = bad (customer churned)
+# Blue/Orange scheme chosen for color-blind accessibility
 CHURN_COLORS = {
-    "Existing Customer": "#2ecc71",  # Green - retained customer
-    "Attrited Customer": "#e74c3c"   # Red - churned customer
+    "Existing Customer": "#3498db",  # Blue - retained customer (calm, stable)
+    "Attrited Customer": "#e67e22"   # Orange - churned customer (warning, attention)
 }
 
 
