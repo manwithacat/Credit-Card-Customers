@@ -1,19 +1,19 @@
 # Simple project workflow — run `make help` to see targets.
 
 PY ?= python
-NB_DIR ?= jupyter_notebooks
-DATA_DIR ?= data
 
-.PHONY: help install check fix lint format sync nb2py py2nb regen app clean nbstrip pre-commit
+.PHONY: help install lint format pre-commit etl features pipeline app clean
 
 help:
 	@echo "Usage:"
 	@echo "  make install    - install dev tools and project deps"
 	@echo "  make lint       - run Ruff lint only"
 	@echo "  make format     - run Black format only"
-	@echo "  make nbstrip    - strip notebook outputs (run before commit)"
-	@echo "  make pre-commit - run lint, format, and nbstrip (recommended before commit)"
-	@echo "  make app        - run the Dash app locally"
+	@echo "  make pre-commit - run lint and format (recommended before commit)"
+	@echo "  make etl        - run ETL pipeline (raw → cleaned.parquet)"
+	@echo "  make features   - run feature engineering (cleaned → features.parquet)"
+	@echo "  make pipeline   - run full pipeline (ETL + features)"
+	@echo "  make app        - run the Streamlit dashboard locally"
 	@echo "  make clean      - remove caches and temp files"
 
 install:
@@ -26,11 +26,17 @@ lint:
 format:
 	black .
 
-nbstrip:
-	nbstripout $(NB_DIR)/*.ipynb
-
-pre-commit: lint format nbstrip
+pre-commit: lint format
 	@echo "✅ Pre-commit checks complete"
+
+etl:
+	$(PY) src/etl.py
+
+features:
+	$(PY) src/features.py
+
+pipeline: etl features
+	@echo "✅ Full data pipeline complete"
 
 app:
 	streamlit run app.py
