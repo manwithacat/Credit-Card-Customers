@@ -87,8 +87,8 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
             for col in formatted_stats.columns:
                 col_lower = col.lower()
 
-                # Check if this is a financial feature
-                is_financial = any(keyword in col_lower for keyword in ['amount', 'amt', 'limit', 'balance', 'revolving'])
+                # Check if this is a financial feature (dollar amounts)
+                is_financial = any(keyword in col_lower for keyword in ['amount', 'amt', 'limit', 'balance', 'bal', 'revolving'])
 
                 # Format each row
                 for idx in formatted_stats.index:
