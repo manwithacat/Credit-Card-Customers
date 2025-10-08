@@ -70,7 +70,9 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
         # -------------------------------------------------------------------------
         # SUMMARY STATISTICS TABLE
         # -------------------------------------------------------------------------
-        st.subheader("Summary Statistics")
+        # Get the count for the subheader (always the same for all columns)
+        sample_count = len(filtered_df)
+        st.subheader(f"Summary Statistics (n={sample_count:,})")
         col1, col2 = st.columns(2)
 
         with col1:
@@ -79,6 +81,9 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
 
             # .describe() generates statistics: count, mean, std, min, quartiles, max
             stats_df = filtered_df[stats_cols].describe()
+
+            # Remove the count row since it's shown in the subheader
+            stats_df = stats_df.drop('count')
 
             # Format for appropriate precision based on feature type
             # Iterate through each column and apply appropriate rounding and formatting
@@ -94,13 +99,10 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
                 for idx in formatted_stats.index:
                     val = stats_df.loc[idx, col]  # Get original numeric value
 
-                    # Count row should never have currency symbols
-                    if idx == 'count':
-                        formatted_stats.loc[idx, col] = f"{val:,.0f}"
                     # Scores and ratios: 2 decimal places with commas
-                    elif any(keyword in col_lower for keyword in ['score', 'ratio', 'utilization', 'rate']):
+                    if any(keyword in col_lower for keyword in ['score', 'ratio', 'utilization', 'rate']):
                         formatted_stats.loc[idx, col] = f"{val:,.2f}"
-                    # Dollar amounts: whole numbers with commas and USD symbol (except count row)
+                    # Dollar amounts: whole numbers with commas and USD symbol
                     elif is_financial:
                         formatted_stats.loc[idx, col] = f"${val:,.0f}"
                     # Counts and time periods: whole numbers with commas
