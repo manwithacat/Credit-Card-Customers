@@ -2,6 +2,12 @@
 
 A pedagogical data science project analyzing credit card customer attrition patterns using Python, pandas, and Streamlit for interactive visualization.
 
+## 🚀 Live Dashboard
+
+**[View the live dashboard →](https://codeinstitute-team4.streamlit.app)**
+
+Explore the interactive Streamlit application with real-time filtering, 24+ visualizations, and comprehensive churn analysis across 10,000+ customer records.
+
 ## Project Overview
 
 This project demonstrates a streamlined data science workflow from raw data to interactive dashboard. Using real-world credit card customer data, we analyze churn patterns and present insights through an interactive Streamlit dashboard. The project emphasizes simplicity, code quality, and educational value.
@@ -491,7 +497,13 @@ To track the effectiveness of these initiatives, monitor:
 
 ## Deployment
 
-### Streamlit Cloud (Recommended)
+### Live Hosted Version
+
+**The dashboard is live at: [https://codeinstitute-team4.streamlit.app](https://codeinstitute-team4.streamlit.app)**
+
+Deployed on Streamlit Cloud with automatic updates on every commit to main branch.
+
+### Streamlit Cloud (Recommended for Your Own Deployment)
 
 1. Push repository to GitHub
 2. Connect to Streamlit Cloud
