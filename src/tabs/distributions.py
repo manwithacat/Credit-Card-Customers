@@ -74,8 +74,36 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
         col1, col2 = st.columns(2)
 
         with col1:
+            # Filter out ID columns like clientnum from summary statistics
+            stats_cols = [c for c in numeric_cols if 'clientnum' not in c.lower()]
+
             # .describe() generates statistics: count, mean, std, min, quartiles, max
-            st.dataframe(filtered_df[numeric_cols].describe(), width="stretch")
+            stats_df = filtered_df[stats_cols].describe()
+
+            # Format for appropriate precision based on feature type
+            # Iterate through each column and apply appropriate rounding
+            formatted_stats = stats_df.copy()
+            for col in formatted_stats.columns:
+                col_lower = col.lower()
+                # Count should always be integer
+                if formatted_stats.index[0] == 'count':
+                    formatted_stats.loc['count', col] = int(formatted_stats.loc['count', col])
+
+                # Determine precision based on feature type
+                if any(keyword in col_lower for keyword in ['score', 'ratio', 'utilization', 'rate']):
+                    # Scores and ratios: 2 decimal places
+                    formatted_stats[col] = formatted_stats[col].round(2)
+                elif any(keyword in col_lower for keyword in ['amount', 'amt', 'limit', 'balance', 'revolving']):
+                    # Dollar amounts: whole numbers
+                    formatted_stats[col] = formatted_stats[col].round(0).astype(int)
+                elif any(keyword in col_lower for keyword in ['count', 'ct', 'months', 'tenure', 'inactive', 'contacts']):
+                    # Counts and time periods: whole numbers
+                    formatted_stats[col] = formatted_stats[col].round(0).astype(int)
+                else:
+                    # Default: 1 decimal place
+                    formatted_stats[col] = formatted_stats[col].round(1)
+
+            st.dataframe(formatted_stats, width="stretch")
 
         with col2:
             # Box plots for key financial features
