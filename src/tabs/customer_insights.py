@@ -563,6 +563,6 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
 
         if summary_cols:
             summary = filtered_df.groupby(churn_col)[summary_cols].agg(['mean', 'median', 'std'])
-            st.dataframe(summary.round(2), use_container_width=True)
+            st.dataframe(summary.round(2), width="stretch")
 
             st.caption("💡 **Insight**: Compare average behaviors between customer segments to identify churn indicators.")

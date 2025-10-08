@@ -71,8 +71,8 @@ def render_overview_tab(filtered_df, churn_col):
     st.subheader("Sample Data")
     # st.dataframe() creates an interactive table that users can scroll and sort
     # .head(100) gets the first 100 rows
-    # use_container_width=True makes the table expand to fill available width
-    st.dataframe(filtered_df.head(100), use_container_width=True)
+    # width="stretch" makes the table expand to fill available width
+    st.dataframe(filtered_df.head(100), width="stretch")
 
     # -------------------------------------------------------------------------
     # DATA TYPES TABLE - Show column info and missing values
@@ -94,4 +94,4 @@ def render_overview_tab(filtered_df, churn_col):
             .values,  # % missing
         }
     )
-    st.dataframe(dtype_df, use_container_width=True)
+    st.dataframe(dtype_df, width="stretch")

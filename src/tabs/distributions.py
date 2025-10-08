@@ -73,7 +73,7 @@ def render_distributions_tab(filtered_df, churn_col):
 
         with col1:
             # .describe() generates statistics: count, mean, std, min, quartiles, max
-            st.dataframe(filtered_df[numeric_cols].describe(), use_container_width=True)
+            st.dataframe(filtered_df[numeric_cols].describe(), width="stretch")
 
         with col2:
             # Box plots for key financial features

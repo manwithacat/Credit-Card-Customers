@@ -13,6 +13,7 @@ plotly==6.3.1                # Interactive visualizations
 streamlit==1.50.0            # Web dashboard framework
 altair==5.5.0                # Streamlit dependency for chart rendering
 pydeck==0.9.1                # Streamlit dependency for map visualizations
+watchdog==6.0.0              # File system event monitoring for faster auto-reload
 
 # ============================================================================
 # Data Engineering

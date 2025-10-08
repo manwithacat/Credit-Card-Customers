@@ -38,15 +38,52 @@ def render_correlations_tab(filtered_df, churn_col):
         # 0 means no linear relationship
         corr_matrix = filtered_df[numeric_cols].corr()
 
+        # Truncate long labels for better display, ensuring uniqueness
+        def truncate_labels(labels, max_len=25):
+            truncated = []
+            seen = {}
+            for label in labels:
+                if len(label) <= max_len:
+                    short = label
+                else:
+                    short = label[:max_len-3] + "..."
+
+                # Handle duplicates by adding counter
+                if short in seen:
+                    seen[short] += 1
+                    short = f"{short[:-3]}_{seen[short]}..."
+                else:
+                    seen[short] = 0
+
+                truncated.append(short)
+            return truncated
+
+        short_labels = truncate_labels(corr_matrix.columns.tolist())
+
+        # Create a copy with shortened labels
+        corr_display = corr_matrix.copy()
+        corr_display.columns = short_labels
+        corr_display.index = short_labels
+
         # px.imshow() creates a heatmap (2D color-coded matrix)
         fig = px.imshow(
-            corr_matrix,
-            text_auto=".2f",  # Show correlation values on cells, formatted to 2 decimals
+            corr_display,
             aspect="auto",  # Automatically adjust aspect ratio
             title="Correlation Heatmap",
             color_continuous_scale="RdBu_r",  # Red-Blue colorscale (red=negative, blue=positive)
             zmin=-1,  # Minimum value for color scale
             zmax=1,  # Maximum value for color scale
+        )
+        # Show correlation values on cells, formatted to 2 decimals
+        fig.update_traces(text=corr_matrix.round(2).values, texttemplate="%{text}")
+
+        # Increase height and adjust layout for better visibility
+        num_features = len(corr_matrix)
+        height = max(600, num_features * 25)  # Dynamic height based on number of features
+        fig.update_layout(
+            height=height,
+            xaxis={'side': 'bottom'},
+            margin=dict(l=150, r=50, t=50, b=150)  # More margin for labels
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -79,12 +116,12 @@ def render_correlations_tab(filtered_df, churn_col):
         with col1:
             st.write("**Strongest Positive Correlations**")
             # .head(10) gets top 10 rows (strongest positive correlations)
-            st.dataframe(corr_df.head(10), use_container_width=True)
+            st.dataframe(corr_df.head(10), width="stretch")
 
         with col2:
             st.write("**Strongest Negative Correlations**")
             # .tail(10) gets bottom 10 rows (strongest negative correlations)
-            st.dataframe(corr_df.tail(10), use_container_width=True)
+            st.dataframe(corr_df.tail(10), width="stretch")
 
         # -------------------------------------------------------------------------
         # SCATTER PLOT - Visualize relationship between two features
