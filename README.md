@@ -53,9 +53,10 @@ This project demonstrates a streamlined data science workflow from raw data to i
 │       ├── overview.py           # Tab 1: Dataset overview and KPIs
 │       ├── distributions.py      # Tab 2: Feature distributions
 │       ├── churn_analysis.py     # Tab 3: Churn patterns
-│       ├── correlations.py       # Tab 4: Feature correlations
-│       └── customer_insights.py  # Tab 5: Behavioral analysis
-├── app.py                 # Streamlit dashboard application (305 lines)
+│       ├── churn_comparison.py   # Tab 4: Churn comparison (ignores filter)
+│       ├── correlations.py       # Tab 5: Feature correlations
+│       └── customer_insights.py  # Tab 6: Behavioral analysis
+├── app.py                 # Streamlit dashboard application (325 lines)
 ├── requirements.txt       # Python dependencies
 ├── Makefile              # Development automation
 └── README.md             # Project documentation
