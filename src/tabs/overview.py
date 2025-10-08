@@ -101,4 +101,18 @@ def render_overview_tab(filtered_df, churn_col, churn_colors=None):
             .values,  # % missing
         }
     )
-    st.dataframe(dtype_df, width="stretch")
+
+    # Apply styling to highlight rows with null values
+    def highlight_nulls(row):
+        """Apply light red background to rows with null values."""
+        if row["Null %"] > 0:
+            return ['background-color: #ffcccc'] * len(row)
+        return [''] * len(row)
+
+    styled_dtype_df = dtype_df.style.apply(highlight_nulls, axis=1)
+    st.dataframe(styled_dtype_df, width="stretch")
+
+    # Add warning message if there are any null values
+    null_features = dtype_df[dtype_df["Null %"] > 0]
+    if len(null_features) > 0:
+        st.warning(f"⚠️ **Data Incompleteness**: {len(null_features)} feature(s) contain missing values. Highlighted rows indicate incomplete data that may require attention during analysis.")
