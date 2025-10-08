@@ -11,7 +11,7 @@ import plotly.express as px
 import numpy as np
 
 
-def render_distributions_tab(filtered_df, churn_col):
+def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
     """
     Render the Distributions tab with histograms and value counts.
 
@@ -24,6 +24,7 @@ def render_distributions_tab(filtered_df, churn_col):
     Args:
         filtered_df (pd.DataFrame): The filtered dataset to analyze
         churn_col (str): Name of the churn column for color coding
+        churn_colors (dict, optional): Color mapping for churn status values
     """
     st.header("Feature Distributions")
 
@@ -61,6 +62,7 @@ def render_distributions_tab(filtered_df, churn_col):
             title=f"Distribution of {selected_num}",
             marginal="box",  # Add a box plot on top
             color=churn_col if churn_col else None,  # Color bars by churn status if available
+            color_discrete_map=churn_colors,  # Apply custom color scheme
         )
         # st.plotly_chart() displays the Plotly figure in Streamlit
         st.plotly_chart(fig, use_container_width=True)

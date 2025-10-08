@@ -11,7 +11,7 @@ import plotly.express as px
 import numpy as np
 
 
-def render_correlations_tab(filtered_df, churn_col):
+def render_correlations_tab(filtered_df, churn_col, churn_colors=None):
     """
     Render the Correlations tab with correlation heatmaps and scatter plots.
 
@@ -24,6 +24,7 @@ def render_correlations_tab(filtered_df, churn_col):
     Args:
         filtered_df (pd.DataFrame): The filtered dataset to analyze
         churn_col (str): Name of the churn column for color coding
+        churn_colors (dict, optional): Color mapping for churn status values
     """
     st.header("Correlation Analysis")
 
@@ -150,6 +151,7 @@ def render_correlations_tab(filtered_df, churn_col):
             x=x_feature,
             y=y_feature,
             color=churn_col if churn_col else None,  # Color points by churn status
+            color_discrete_map=churn_colors,  # Apply custom color scheme
             title=f"{x_feature} vs {y_feature}",
             trendline="ols"
             if len(filtered_df) > 10

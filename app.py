@@ -38,6 +38,16 @@ from src.tabs import (
     render_customer_insights_tab,
 )
 
+# ============================================================================
+# COLOR SCHEME CONFIGURATION
+# ============================================================================
+# Semantic color mapping for churn status visualization
+# Green = good (customer retained), Red = bad (customer churned)
+CHURN_COLORS = {
+    "Existing Customer": "#2ecc71",  # Green - retained customer
+    "Attrited Customer": "#e74c3c"   # Red - churned customer
+}
+
 
 # ============================================================================
 # DATA LOADING FUNCTION
@@ -268,31 +278,31 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 # TAB 1: OVERVIEW - High-level metrics and data preview
 # ============================================================================
 with tab1:
-    render_overview_tab(filtered_df, churn_col)
+    render_overview_tab(filtered_df, churn_col, churn_colors=CHURN_COLORS)
 
 # ============================================================================
 # TAB 2: DISTRIBUTIONS - Explore how values are spread across features
 # ============================================================================
 with tab2:
-    render_distributions_tab(filtered_df, churn_col)
+    render_distributions_tab(filtered_df, churn_col, churn_colors=CHURN_COLORS)
 
 # ============================================================================
 # TAB 3: CHURN ANALYSIS - Understand who churned and why
 # ============================================================================
 with tab3:
-    render_churn_analysis_tab(filtered_df, churn_col, card_col)
+    render_churn_analysis_tab(filtered_df, churn_col, card_col, churn_colors=CHURN_COLORS)
 
 # ============================================================================
 # TAB 4: CORRELATIONS - Find relationships between numeric features
 # ============================================================================
 with tab4:
-    render_correlations_tab(filtered_df, churn_col)
+    render_correlations_tab(filtered_df, churn_col, churn_colors=CHURN_COLORS)
 
 # ============================================================================
 # TAB 5: CUSTOMER INSIGHTS - Advanced behavioral pattern analysis
 # ============================================================================
 with tab5:
-    render_customer_insights_tab(filtered_df, churn_col, card_col)
+    render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=CHURN_COLORS)
 
 
 # ============================================================================
