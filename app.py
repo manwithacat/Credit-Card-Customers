@@ -36,6 +36,7 @@ from src.tabs import (
     render_churn_analysis_tab,
     render_correlations_tab,
     render_customer_insights_tab,
+    render_churn_comparison_tab,
 )
 
 # ============================================================================
@@ -265,11 +266,12 @@ st.sidebar.markdown(f"**Filtered Records:** {len(filtered_df):,} / {len(df):,}")
 # ============================================================================
 # st.tabs() creates a tabbed interface - like browser tabs but inside our app
 # Users can click between tabs to see different views of the data
-# This returns 5 tab objects that we assign to tab1, tab2, tab3, tab4, tab5
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+# This returns 6 tab objects that we assign to tab1, tab2, tab3, tab4, tab5, tab6
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "📊 Overview",
     "📈 Distributions",
     "🔍 Churn Analysis",
+    "🔬 Churn Comparison",
     "🔗 Correlations",
     "💡 Customer Insights"
 ])
@@ -293,15 +295,23 @@ with tab3:
     render_churn_analysis_tab(filtered_df, churn_col, card_col, churn_colors=CHURN_COLORS)
 
 # ============================================================================
-# TAB 4: CORRELATIONS - Find relationships between numeric features
+# TAB 4: CHURN COMPARISON - Direct comparison ignoring churn filter
 # ============================================================================
 with tab4:
+    # Pass both full dataset (df) and filtered dataset (filtered_df)
+    # This tab ignores churn status filter but respects other filters
+    render_churn_comparison_tab(df, filtered_df, churn_col, churn_colors=CHURN_COLORS)
+
+# ============================================================================
+# TAB 5: CORRELATIONS - Find relationships between numeric features
+# ============================================================================
+with tab5:
     render_correlations_tab(filtered_df, churn_col, churn_colors=CHURN_COLORS)
 
 # ============================================================================
-# TAB 5: CUSTOMER INSIGHTS - Advanced behavioral pattern analysis
+# TAB 6: CUSTOMER INSIGHTS - Advanced behavioral pattern analysis
 # ============================================================================
-with tab5:
+with tab6:
     render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=CHURN_COLORS)
 
 

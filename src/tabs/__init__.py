@@ -45,6 +45,7 @@ from .distributions import render_distributions_tab  # Tab 2: Feature distributi
 from .churn_analysis import render_churn_analysis_tab  # Tab 3: Churn patterns
 from .correlations import render_correlations_tab  # Tab 4: Feature correlations
 from .customer_insights import render_customer_insights_tab  # Tab 5: Behavioral insights
+from .churn_comparison import render_churn_comparison_tab  # Tab 6: Churn comparison (ignores filter)
 
 # ============================================================================
 # __all__ - Define what gets exported from this package
@@ -59,13 +60,14 @@ from .customer_insights import render_customer_insights_tab  # Tab 5: Behavioral
 # 3. IDE support: Helps code editors provide better autocomplete
 # 4. Explicit is better than implicit: Clear about what's meant to be used externally
 
-# In our case, we export all 5 render functions since they're all meant to be used by app.py
+# In our case, we export all 6 render functions since they're all meant to be used by app.py
 __all__ = [
     "render_overview_tab",
     "render_distributions_tab",
     "render_churn_analysis_tab",
     "render_correlations_tab",
     "render_customer_insights_tab",
+    "render_churn_comparison_tab",
 ]
 
 # ============================================================================
