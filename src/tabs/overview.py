@@ -9,7 +9,7 @@ import streamlit as st
 import pandas as pd
 
 
-def render_overview_tab(filtered_df, churn_col):
+def render_overview_tab(filtered_df, churn_col, churn_colors=None):
     """
     Render the Overview tab with KPIs and data preview.
 
@@ -21,6 +21,7 @@ def render_overview_tab(filtered_df, churn_col):
     Args:
         filtered_df (pd.DataFrame): The filtered dataset to display
         churn_col (str): Name of the churn column for metrics
+        churn_colors (dict, optional): Color mapping for churn status values
     """
     st.header("Dataset Overview")
 

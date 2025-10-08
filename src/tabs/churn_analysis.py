@@ -11,7 +11,7 @@ import plotly.express as px
 import numpy as np
 
 
-def render_churn_analysis_tab(filtered_df, churn_col, card_col):
+def render_churn_analysis_tab(filtered_df, churn_col, card_col, churn_colors=None):
     """
     Render the Churn Analysis tab with segmented churn insights.
 
@@ -25,6 +25,7 @@ def render_churn_analysis_tab(filtered_df, churn_col, card_col):
         filtered_df (pd.DataFrame): The filtered dataset to analyze
         churn_col (str): Name of the churn column
         card_col (str): Name of the card category column
+        churn_colors (dict, optional): Color mapping for churn status values
     """
     st.header("Churn Analysis")
 
@@ -104,6 +105,7 @@ def render_churn_analysis_tab(filtered_df, churn_col, card_col):
                         y=feature,
                         title=f"{feature} by Churn Status",
                         color=churn_col,
+                        color_discrete_map=churn_colors,  # Apply custom color scheme
                     )
                     st.plotly_chart(fig, use_container_width=True)
 

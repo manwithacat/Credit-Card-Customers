@@ -11,7 +11,7 @@ import plotly.express as px
 import numpy as np
 
 
-def render_customer_insights_tab(filtered_df, churn_col, card_col):
+def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=None):
     """
     Render the Customer Insights tab with engineered features and behavioral patterns.
 
@@ -25,6 +25,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
         filtered_df (pd.DataFrame): The filtered dataset to analyze
         churn_col (str): Name of the churn column
         card_col (str): Name of the card category column
+        churn_colors (dict, optional): Color mapping for churn status values
     """
     st.header("Customer Insights & Behavioral Patterns")
 
@@ -47,6 +48,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                 filtered_df,
                 x="churn_risk_score",
                 color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                 barmode="overlay",
                 title="Churn Risk Score Distribution",
                 labels={"churn_risk_score": "Risk Score (0=Low, 1=High)"},
@@ -126,6 +128,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                 filtered_df,
                 x="rfm_score",
                 color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                 barmode="overlay",
                 title="RFM Score Distribution by Churn Status",
                 labels={"rfm_score": "RFM Score (0=Low, 1=High)"},
@@ -141,6 +144,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                 x="frequency_score",
                 y="monetary_score",
                 color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                 title="Frequency vs Monetary Score",
                 labels={
                     "frequency_score": "Frequency Score",
@@ -166,6 +170,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                 filtered_df,
                 x="engagement_score",
                 color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                 barmode="overlay",
                 title="Engagement Score Distribution",
                 labels={"engagement_score": "Engagement Score (0=Low, 1=High)"},
@@ -182,6 +187,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                     x="engagement_score",
                     y="rfm_score",
                     color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                     title="Engagement vs RFM Score",
                     labels={
                         "engagement_score": "Engagement Score",
@@ -251,6 +257,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                     x=churn_col if churn_col else None,
                     y="transaction_density",
                     color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                     title="Transaction Density by Churn Status",
                     labels={"transaction_density": "Transactions per Month"}
                 )
@@ -264,6 +271,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                     x=churn_col if churn_col else None,
                     y="monthly_spend_rate",
                     color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                     title="Monthly Spend Rate by Churn Status",
                     labels={"monthly_spend_rate": "$ Spent per Month"}
                 )
@@ -294,6 +302,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
             x=credit_col,
             y=trans_amt_col,
             color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
             size=util_col if util_col and util_col in filtered_df.columns else None,
             hover_data=[credit_col, trans_amt_col, util_col] if util_col else [credit_col, trans_amt_col],
             title="Credit Limit vs Total Transaction Amount (bubble size = utilization)",
@@ -324,6 +333,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                 x=trans_count_col,
                 y=avg_trans_col,
                 color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                 title="Transaction Frequency vs Avg Transaction Size",
                 labels={trans_count_col: "Transaction Count", avg_trans_col: "Avg Transaction ($)"},
                 opacity=0.6,
@@ -339,6 +349,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                     x=churn_col,
                     y=trans_count_col,
                     color=churn_col,
+                    color_discrete_map=churn_colors,
                     title="Transaction Count by Churn Status",
                     labels={trans_count_col: "Transaction Count"}
                 )
@@ -388,6 +399,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                     filtered_df,
                     x=months_col,
                     color=churn_col,
+                    color_discrete_map=churn_colors,
                     barmode='overlay',
                     title="Customer Tenure Distribution",
                     labels={months_col: "Months on Book"},
@@ -411,6 +423,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col):
                 filtered_df,
                 x=util_col,
                 color=churn_col if churn_col else None,
+                color_discrete_map=churn_colors,
                 barmode='overlay',
                 title="Credit Utilization Distribution",
                 labels={util_col: "Utilization Ratio"},
