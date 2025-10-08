@@ -156,6 +156,8 @@ def render_correlations_tab(filtered_df, churn_col):
             else None,  # Add linear regression line if enough data
             opacity=0.6,  # Make points slightly transparent so we can see overlaps
         )
+        # Increase height for better visibility
+        fig.update_layout(height=600)
         st.plotly_chart(fig, use_container_width=True)
 
     else:
