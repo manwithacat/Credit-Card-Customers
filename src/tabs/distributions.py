@@ -86,19 +86,28 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
             for col in formatted_stats.columns:
                 col_lower = col.lower()
 
-                # Determine precision and format based on feature type
-                if any(keyword in col_lower for keyword in ['score', 'ratio', 'utilization', 'rate']):
+                # Check if this is a financial feature
+                is_financial = any(keyword in col_lower for keyword in ['amount', 'amt', 'limit', 'balance', 'revolving'])
+
+                # Format each row
+                for idx in formatted_stats.index:
+                    val = formatted_stats.loc[idx, col]
+
+                    # Count row should never have currency symbols
+                    if idx == 'count':
+                        formatted_stats.loc[idx, col] = f"{val:,.0f}"
                     # Scores and ratios: 2 decimal places with commas
-                    formatted_stats[col] = formatted_stats[col].apply(lambda x: f"{x:,.2f}")
-                elif any(keyword in col_lower for keyword in ['amount', 'amt', 'limit', 'balance', 'revolving']):
-                    # Dollar amounts: whole numbers with commas and USD symbol
-                    formatted_stats[col] = formatted_stats[col].apply(lambda x: f"${x:,.0f}")
-                elif any(keyword in col_lower for keyword in ['count', 'ct', 'months', 'tenure', 'inactive', 'contacts']):
+                    elif any(keyword in col_lower for keyword in ['score', 'ratio', 'utilization', 'rate']):
+                        formatted_stats.loc[idx, col] = f"{val:,.2f}"
+                    # Dollar amounts: whole numbers with commas and USD symbol (except count row)
+                    elif is_financial:
+                        formatted_stats.loc[idx, col] = f"${val:,.0f}"
                     # Counts and time periods: whole numbers with commas
-                    formatted_stats[col] = formatted_stats[col].apply(lambda x: f"{x:,.0f}")
-                else:
+                    elif any(keyword in col_lower for keyword in ['ct', 'months', 'tenure', 'inactive', 'contacts']):
+                        formatted_stats.loc[idx, col] = f"{val:,.0f}"
                     # Default: 1 decimal place with commas
-                    formatted_stats[col] = formatted_stats[col].apply(lambda x: f"{x:,.1f}")
+                    else:
+                        formatted_stats.loc[idx, col] = f"{val:,.1f}"
 
             st.dataframe(formatted_stats, width="stretch")
 
