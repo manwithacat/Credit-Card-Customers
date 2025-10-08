@@ -166,7 +166,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
                 nbins=30
             )
             fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="comparison_hist")
 
         with col2:
             # Box plot comparison
@@ -180,7 +180,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
                 points=False  # Don't show individual points for clarity
             )
             fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="comparison_box")
 
     # -------------------------------------------------------------------------
     # CATEGORICAL FEATURE COMPARISONS
@@ -217,7 +217,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
             )
             fig.update_layout(height=400)
             fig.update_xaxes(tickangle=-45)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="comparison_existing_cat_bar")
 
         with col2:
             # Attrited customers breakdown
@@ -231,7 +231,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
             )
             fig.update_layout(height=400)
             fig.update_xaxes(tickangle=-45)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="comparison_attrited_cat_bar")
 
     # -------------------------------------------------------------------------
     # ENGINEERED FEATURES COMPARISON (if available)
@@ -278,7 +278,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
             height=500
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key="comparison_radar")
 
         st.caption("💡 **Insight**: This radar chart shows the average profile of each group. Larger gaps indicate stronger differentiators.")
 
@@ -363,7 +363,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
                 color_continuous_scale='RdYlGn_r'
             )
             fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="comparison_effect_size_bar")
 
             st.caption("""
             💡 **Insight**: Effect size measures how different the two groups are (Cohen's d):

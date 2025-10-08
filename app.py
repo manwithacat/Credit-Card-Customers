@@ -102,7 +102,12 @@ def load_data():
                 raw = root / "data" / "raw"
                 try:
                     csv_file = next(raw.rglob("*.csv"))
-                    return pd.read_csv(csv_file)
+                    df = pd.read_csv(csv_file)
+                    df = df.rename(columns={
+                        'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1': 'naive_bayes_1',
+                        'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2': 'naive_bayes_2'
+                    })
+                    return df
                 except StopIteration:
                     return pd.DataFrame()
 
@@ -120,25 +125,46 @@ def load_data():
             # Fall back to cleaned data if available
             if cleaned_file.exists():
                 st.info("   → Loading cleaned data without features as fallback")
-                return pd.read_parquet(cleaned_file)
+                df = pd.read_parquet(cleaned_file)
+                df = df.rename(columns={
+                    'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1': 'naive_bayes_1',
+                    'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2': 'naive_bayes_2'
+                })
+                return df
             return pd.DataFrame()
 
     # Try to load the feature-engineered parquet file
     if features_file.exists():
         # Parquet is a fast, compressed file format for data (better than CSV)
-        return pd.read_parquet(features_file)
+        df = pd.read_parquet(features_file)
+        # Rename excessively long naive bayes column names
+        df = df.rename(columns={
+            'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1': 'naive_bayes_1',
+            'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2': 'naive_bayes_2'
+        })
+        return df
 
     # Final fallback to cleaned data
     if cleaned_file.exists():
         st.warning("⚠️ Loading cleaned data without engineered features.")
-        return pd.read_parquet(cleaned_file)
+        df = pd.read_parquet(cleaned_file)
+        df = df.rename(columns={
+            'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1': 'naive_bayes_1',
+            'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2': 'naive_bayes_2'
+        })
+        return df
 
     # Last resort: raw CSV
     st.warning("⚠️ Loading raw CSV as fallback. Data may not be fully processed.")
     raw = root / "data" / "raw"
     try:
         csv_file = next(raw.rglob("*.csv"))
-        return pd.read_csv(csv_file)
+        df = pd.read_csv(csv_file)
+        df = df.rename(columns={
+            'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1': 'naive_bayes_1',
+            'Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2': 'naive_bayes_2'
+        })
+        return df
     except StopIteration:
         return pd.DataFrame()
 

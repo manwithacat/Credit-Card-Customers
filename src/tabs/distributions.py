@@ -65,7 +65,7 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
             color_discrete_map=churn_colors,  # Apply custom color scheme
         )
         # st.plotly_chart() displays the Plotly figure in Streamlit
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key="dist_numeric_hist")
 
         # -------------------------------------------------------------------------
         # SUMMARY STATISTICS TABLE
@@ -105,7 +105,7 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
                 )
                 # Rotate x-axis labels 45 degrees so they don't overlap
                 fig.update_xaxes(tickangle=-45)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="dist_key_features_box")
 
     # -------------------------------------------------------------------------
     # CATEGORICAL FEATURES SECTION
@@ -132,4 +132,4 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
                 labels={"x": selected_cat, "y": "Count"},
             )
             fig.update_xaxes(tickangle=-45)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="dist_categorical_bar")

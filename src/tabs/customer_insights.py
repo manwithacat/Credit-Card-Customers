@@ -55,7 +55,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 nbins=30,
                 opacity=0.7
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="insights_risk_score_hist")
 
         with col2:
             # Risk category breakdown
@@ -70,9 +70,10 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     risk_churn,
                     title="Actual Churn Rate by Risk Category",
                     labels={"value": "Churn Rate (%)", "index": "Risk Category"},
-                    barmode="group"
+                    barmode="group",
+                    color_discrete_map=churn_colors
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_risk_category_bar")
 
         st.caption("💡 **Insight**: The engineered risk score combines transaction frequency, inactivity, engagement, and utilization patterns. Validate that high-risk customers actually churn more.")
 
@@ -93,7 +94,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 title="Customer Segment Distribution",
                 hole=0.4  # Creates a donut chart
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="insights_segment_pie")
 
         with col2:
             # Churn rate by segment
@@ -108,9 +109,10 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     segment_churn,
                     title="Churn Rate by Customer Segment",
                     labels={"value": "Churn Rate (%)", "index": "Customer Segment"},
-                    barmode="group"
+                    barmode="group",
+                    color_discrete_map=churn_colors
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_segment_churn_bar")
 
         st.caption("💡 **Insight**: Segments combine RFM score and engagement. Champions (high RFM + engagement) should have lowest churn, while Hibernating customers are at highest risk.")
 
@@ -135,7 +137,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 nbins=20,
                 opacity=0.7
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="insights_rfm_hist")
 
         with col2:
             # Frequency vs Monetary scatter
@@ -152,7 +154,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 },
                 opacity=0.6
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="insights_rfm_scatter")
 
         st.caption("💡 **Insight**: RFM scores (0-1 normalized) show customer value. Low RFM scores indicate customers who transact infrequently and spend little - prime churn candidates.")
 
@@ -177,7 +179,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 nbins=25,
                 opacity=0.7
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="insights_engagement_hist")
 
         with col2:
             # Engagement vs RFM (if available)
@@ -198,7 +200,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 # Add quadrant lines to show segments
                 fig.add_hline(y=0.5, line_dash="dash", line_color="gray", opacity=0.5)
                 fig.add_vline(x=0.5, line_dash="dash", line_color="gray", opacity=0.5)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_engagement_rfm_scatter")
 
         st.caption("💡 **Insight**: Engagement combines products held, transaction frequency, and activity level. The quadrant plot shows how engagement and value intersect to create customer segments.")
 
@@ -220,7 +222,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 labels={"x": "Lifecycle Stage", "y": "Number of Customers"},
                 color=lifecycle_counts.index
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="insights_lifecycle_bar")
 
         with col2:
             # Churn rate by lifecycle
@@ -235,9 +237,10 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     lifecycle_churn,
                     title="Churn Rate by Lifecycle Stage",
                     labels={"value": "Churn Rate (%)", "index": "Lifecycle Stage"},
-                    barmode="group"
+                    barmode="group",
+                    color_discrete_map=churn_colors
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_lifecycle_churn_bar")
 
         st.caption("💡 **Insight**: Lifecycle stages segment customers by tenure (New/Growing/Mature/Loyal). Different stages may require different retention strategies.")
 
@@ -261,7 +264,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     title="Transaction Density by Churn Status",
                     labels={"transaction_density": "Transactions per Month"}
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_trans_density_box")
 
         with col2:
             if "monthly_spend_rate" in filtered_df.columns:
@@ -275,7 +278,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     title="Monthly Spend Rate by Churn Status",
                     labels={"monthly_spend_rate": "$ Spent per Month"}
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_monthly_spend_box")
 
         st.caption("💡 **Insight**: These normalized metrics account for customer tenure, making comparisons fairer between new and long-term customers.")
 
@@ -309,7 +312,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
             labels={credit_col: "Credit Limit", trans_amt_col: "Total Transactions ($)"},
             opacity=0.6
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key="insights_credit_vs_trans_scatter")
 
         st.caption("💡 **Insight**: Look for clusters of high-limit but low-spending customers - these may be at risk of churn.")
     else:
@@ -339,7 +342,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 opacity=0.6,
                 trendline="ols" if len(filtered_df) > 10 else None
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="insights_trans_freq_scatter")
 
         with col2:
             # Distribution comparison
@@ -353,7 +356,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     title="Transaction Count by Churn Status",
                     labels={trans_count_col: "Transaction Count"}
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_trans_count_box")
 
         st.caption("💡 **Insight**: Customers with fewer transactions and lower amounts are more likely to churn.")
     else:
@@ -387,9 +390,10 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                         rel_churn,
                         title="Churn Rate by Number of Products Held",
                         labels={'value': 'Percentage (%)', 'index': 'Number of Products'},
-                        barmode='group'
+                        barmode='group',
+                        color_discrete_map=churn_colors
                     )
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, use_container_width=True, key="insights_products_churn_bar")
                     st.caption("💡 **Insight**: Customers with more products tend to have lower churn rates (higher engagement).")
 
         with col2:
@@ -406,7 +410,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     nbins=30,
                     opacity=0.7
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_tenure_hist")
                 st.caption("💡 **Insight**: Compare tenure patterns between churned and active customers.")
 
     # -------------------------------------------------------------------------
@@ -430,7 +434,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                 nbins=40,
                 opacity=0.7
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="insights_util_hist")
 
         with col2:
             # Create utilization categories for analysis
@@ -456,9 +460,10 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                         util_churn,
                         title="Churn Rate by Credit Utilization Category",
                         labels={'value': 'Percentage (%)', 'index': 'Utilization Category'},
-                        barmode='group'
+                        barmode='group',
+                        color_discrete_map=churn_colors
                     )
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, use_container_width=True, key="insights_util_category_bar")
 
         st.caption("💡 **Insight**: Extreme utilization (very low or very high) may indicate churn risk.")
     else:
@@ -491,7 +496,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     title="Average Transaction Amount by Card Category",
                     color=card_col
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_card_trans_amt_bar")
 
             with col2:
                 fig = px.bar(
@@ -501,7 +506,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
                     title="Average Credit Limit by Card Category",
                     color=card_col
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="insights_card_credit_limit_bar")
 
             st.caption("💡 **Insight**: Different card tiers show distinct spending and credit patterns.")
 
@@ -554,7 +559,7 @@ def render_customer_insights_tab(filtered_df, churn_col, card_col, churn_colors=
             opacity=0.6,
             hover_data=[x_dim, y_dim, color_dim]
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key="insights_multi_dim_scatter")
 
         st.caption("💡 **Insight**: Identify customer segments and patterns that correlate with churn behavior.")
 

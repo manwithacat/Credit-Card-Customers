@@ -42,8 +42,10 @@ def render_churn_analysis_tab(filtered_df, churn_col, card_col, churn_colors=Non
                 values=churn_counts.values,  # The sizes of pie slices
                 names=churn_counts.index,  # The labels for each slice
                 title="Churn Distribution",
+                color=churn_counts.index,  # Color by churn status
+                color_discrete_map=churn_colors,  # Apply custom color scheme
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="churn_pie_chart")
 
         with col2:
             # -------------------------------------------------------------------------
@@ -62,9 +64,10 @@ def render_churn_analysis_tab(filtered_df, churn_col, card_col, churn_colors=Non
                     title=f"Churn Rate by {card_col}",
                     labels={"value": "Percentage (%)", "index": card_col},
                     barmode="group",  # Put bars side-by-side instead of stacked
+                    color_discrete_map=churn_colors,  # Apply custom color scheme
                 )
                 fig.update_xaxes(tickangle=-45)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="churn_by_card_chart")
 
         # -------------------------------------------------------------------------
         # CHURN BY NUMERIC FEATURES - Compare distributions between churned/not churned
@@ -107,7 +110,7 @@ def render_churn_analysis_tab(filtered_df, churn_col, card_col, churn_colors=Non
                         color=churn_col,
                         color_discrete_map=churn_colors,  # Apply custom color scheme
                     )
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, use_container_width=True, key=f"churn_box_{feature}")
 
         # -------------------------------------------------------------------------
         # CHURN BY CATEGORICAL FEATURES
@@ -141,9 +144,10 @@ def render_churn_analysis_tab(filtered_df, churn_col, card_col, churn_colors=Non
                     title=f"Churn Rate by {selected_cat}",
                     labels={"value": "Percentage (%)", "index": selected_cat},
                     barmode="group",
+                    color_discrete_map=churn_colors,  # Apply custom color scheme
                 )
                 fig.update_xaxes(tickangle=-45)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, key="churn_by_categorical")
 
     else:
         # st.warning() shows a yellow warning message

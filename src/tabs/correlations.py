@@ -86,7 +86,7 @@ def render_correlations_tab(filtered_df, churn_col, churn_colors=None):
             xaxis={'side': 'bottom'},
             margin=dict(l=150, r=50, t=50, b=150)  # More margin for labels
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key="corr_heatmap")
 
         # -------------------------------------------------------------------------
         # TOP CORRELATIONS TABLE
@@ -160,7 +160,7 @@ def render_correlations_tab(filtered_df, churn_col, churn_colors=None):
         )
         # Increase height for better visibility
         fig.update_layout(height=600)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key="corr_scatter")
 
     else:
         st.warning("Not enough numeric columns for correlation analysis.")
