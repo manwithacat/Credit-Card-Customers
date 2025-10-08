@@ -316,9 +316,14 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
 
     if numeric_cols:
         # Calculate effect size (Cohen's d) for each metric
+        # Exclude naive_bayes features as they're synthetic and not informative
         differentiators = []
 
         for col in numeric_cols:
+            # Skip naive_bayes synthetic columns
+            if 'naive_bayes' in col.lower():
+                continue
+
             if col in comparison_df.columns:
                 existing_vals = existing[col].dropna()
                 attrited_vals = attrited[col].dropna()
