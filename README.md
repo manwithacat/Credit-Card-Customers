@@ -175,6 +175,8 @@ The feature engineering script creates 17 advanced predictive features:
 - `balance_estimate`: Credit limit × utilization
 - `spend_per_product_monthly`: Spending per product per month
 
+📘 **[View detailed feature documentation →](docs/engineered_features.md)**
+
 **Output**: 10,127 rows × 44 columns (1.1MB)
 
 **Why Feature Engineering Matters**:
