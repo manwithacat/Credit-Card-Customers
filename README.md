@@ -209,12 +209,13 @@ The feature engineering script creates 17 advanced predictive features:
 
 Interactive Streamlit application with modular tab architecture:
 
-**Main Application (`app.py` - 305 lines)**:
+**Main Application (`app.py` - 325 lines)**:
 - Data loading and caching logic
 - Automatic pipeline execution (ETL → Features) if data missing
 - Sidebar filters (churn status, gender, card category)
 - Tab orchestration and state management
 - Clean imports from `src.tabs` package
+- Blue/orange color scheme for accessibility (color-blind friendly)
 
 **Modular Tab Components (`src/tabs/`)**:
 Each tab is a self-contained module with a single `render_*_tab()` function:
@@ -236,29 +237,40 @@ Each tab is a self-contained module with a single `render_*_tab()` function:
    - Box plots comparing churned vs active customers
    - Categorical churn rate analysis
 
-4. **🔗 Correlations** (`correlations.py` - 130 lines)
-   - Full correlation heatmap for numeric features
+4. **🔬 Churn Comparison** (`churn_comparison.py` - 385 lines)
+   - **Direct comparison ignoring churn filter** - always shows both groups
+   - Population overview with churn rate metrics
+   - Key metric comparisons table with percentage differences
+   - Side-by-side distribution visualizations (histograms & box plots)
+   - Categorical feature breakdowns for each group
+   - Radar chart comparing engineered feature profiles
+   - Statistical summary (mean, median, standard deviation)
+   - **Cohen's d effect size analysis** - identifies strongest churn predictors
+
+5. **🔗 Correlations** (`correlations.py` - 165 lines)
+   - Full correlation heatmap for numeric features (truncated labels)
    - Top positive/negative correlation tables
    - Interactive scatter plots with trendlines
    - User-selectable feature pairs
 
-5. **💡 Customer Insights** (`customer_insights.py` - 555 lines)
+6. **💡 Customer Insights** (`customer_insights.py` - 555 lines)
    - **Engineered Features**: Churn risk scores, customer segmentation (Champion/At Risk/Potential/Hibernating), RFM analysis, engagement scores, lifecycle stage analysis, transaction density metrics
    - **Traditional Behavioral Analysis**: Credit limit vs transactions, transaction patterns, engagement by products held, utilization patterns, card type segmentation, multi-dimensional customer profiling
 
 **Architecture Benefits**:
-- **Reduced Complexity**: Main app.py went from 1182 → 305 lines (64% reduction)
+- **Reduced Complexity**: Main app.py went from 1182 → 325 lines (72% reduction)
 - **Improved Maintainability**: Each tab is independent and testable
 - **Better Onboarding**: New contributors can understand tabs individually
 - **Easier Debugging**: Issues isolated to specific modules
 - **Extensibility**: New tabs can be added without touching existing code
 
 **Dashboard Features**:
-- Real-time filtering across all tabs
-- 21+ interactive Plotly visualizations
+- Real-time filtering across all tabs (Churn Comparison ignores churn filter)
+- 24+ interactive Plotly visualizations with blue/orange color scheme
 - Responsive layout with tabs and columns
 - Insight captions explaining each visualization
 - `@st.cache_data` for optimal performance
+- Label truncation for long feature names (e.g., naive_bayes columns)
 
 ## Development Workflow
 
@@ -359,7 +371,7 @@ Based on dashboard exploration:
 5. **Lifecycle Trends**: New customers (0-1 year) have higher churn than loyal (3+ year) customers
 6. **Engagement Impact**: Low engagement scores strongly correlate with churn
 
-Explore these patterns interactively via the dashboard's 5 tabs and 21+ visualizations!
+Explore these patterns interactively via the dashboard's 6 tabs and 24+ visualizations!
 
 ## Conclusions & Recommendations
 
