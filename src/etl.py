@@ -105,16 +105,7 @@ def run_etl():
         }).astype("Int64")  # Use nullable integer type (capital I)
 
     # ------------------------------------------------------------------------
-    # 3.5: Handle missing values in categorical columns
-    # ------------------------------------------------------------------------
-    # Replace "Unknown" text with pandas NA (proper missing value marker)
-    # This allows us to handle missing data more systematically
-    for col in ["education_level", "income_category", "marital_status"]:
-        if col in df.columns:
-            df[col] = df[col].replace({"Unknown": pd.NA, "unknown": pd.NA})
-
-    # ------------------------------------------------------------------------
-    # 3.6: Enforce integer data types
+    # 3.5: Enforce integer data types
     # ------------------------------------------------------------------------
     # These columns should be whole numbers (counts, months, etc.)
     # pd.to_numeric with errors='coerce' converts invalid values to NaN
@@ -132,7 +123,7 @@ def run_etl():
             df[c] = pd.to_numeric(df[c], errors="coerce").astype("Int64")
 
     # ------------------------------------------------------------------------
-    # 3.7: Enforce float data types
+    # 3.6: Enforce float data types
     # ------------------------------------------------------------------------
     # These columns should be decimal numbers (amounts, ratios, etc.)
     float_like = [
@@ -149,7 +140,7 @@ def run_etl():
             df[c] = pd.to_numeric(df[c], errors="coerce")
 
     # ------------------------------------------------------------------------
-    # 3.8: Create derived feature - Average Transaction Size
+    # 3.7: Create derived feature - Average Transaction Size
     # ------------------------------------------------------------------------
     # This new feature gives us insight into spending patterns
     # avg_transaction = total_amount / total_count
@@ -160,7 +151,7 @@ def run_etl():
         )
 
     # ------------------------------------------------------------------------
-    # 3.9: Create derived feature - Tenure in Years
+    # 3.8: Create derived feature - Tenure in Years
     # ------------------------------------------------------------------------
     # Convert months to years for more intuitive interpretation
     # Round to 2 decimal places for readability
