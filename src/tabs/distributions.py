@@ -74,8 +74,8 @@ def render_distributions_tab(filtered_df, churn_col, churn_colors=None):
         col1, col2 = st.columns(2)
 
         with col1:
-            # Filter out ID columns like clientnum from summary statistics
-            stats_cols = [c for c in numeric_cols if 'clientnum' not in c.lower()]
+            # Filter out ID columns and naive_bayes synthetic features from summary statistics
+            stats_cols = [c for c in numeric_cols if 'clientnum' not in c.lower() and 'naive_bayes' not in c.lower()]
 
             # .describe() generates statistics: count, mean, std, min, quartiles, max
             stats_df = filtered_df[stats_cols].describe()
