@@ -17,25 +17,11 @@ pydeck==0.9.1                # Streamlit dependency for map visualizations
 # ============================================================================
 # Data Engineering
 # ============================================================================
-kagglehub==0.3.13            # Kaggle API client for dataset download
 pyarrow==21.0.0              # Parquet file format support
-openpyxl==3.1.5              # Excel file reading (for data dictionaries)
-
-# ============================================================================
-# Jupyter Notebook (VS Code Integration)
-# ============================================================================
-ipykernel==6.30.1            # Jupyter kernel for VS Code
-ipython==9.6.0               # Interactive Python shell
-jupyter_client==8.6.3        # Jupyter protocol client
-jupyter_core==5.8.1          # Core Jupyter functionality
-nbformat==5.10.4             # .ipynb file format handling
-nbclient==0.10.2             # Executing notebooks programmatically
 
 # ============================================================================
 # DevOps & Code Quality Tools
 # ============================================================================
-nbdime==4.0.2                # Notebook diff and merge tool
-nbstripout==0.8.1            # Strip notebook outputs before commit
 ruff==0.8.4                  # Fast Python linter (replaces flake8, isort, etc.)
 black==24.10.0               # Code formatter for consistent style
 
@@ -44,7 +30,18 @@ black==24.10.0               # Code formatter for consistent style
 # In production projects, these are often in separate dev-requirements.txt
 
 # ============================================================================
-# Future ML Dependencies (Commented out until needed)
+# Machine Learning & Statistical Modelling
 # ============================================================================
-# scikit-learn==1.6.1         # Machine learning algorithms
-# scipy==1.13.1               # Scientific computing (scikit-learn dependency)
+scikit-learn==1.6.1          # Machine learning algorithms
+statsmodels==0.14.5          # Statistical modelling and regression tools
+
+# ============================================================================
+# Optional Dependencies Detected in Environment (not explicitly required)
+# ============================================================================
+# fqdn==1.5.1
+# isoduration==20.11.0
+# jsonpointer==3.0.0
+# rfc3987-syntax==1.1.0
+# tinycss2==1.4.0
+# uri-template==1.3.0
+# webcolors==24.11.1
