@@ -12,6 +12,22 @@ import plotly.graph_objects as go
 import numpy as np
 
 
+def truncate_label(label, max_len=30):
+    """
+    Truncate long feature labels for better display.
+
+    Args:
+        label (str): The label to truncate
+        max_len (int): Maximum length before truncation
+
+    Returns:
+        str: Truncated label with ellipsis if needed
+    """
+    if len(label) <= max_len:
+        return label
+    return label[:max_len-3] + "..."
+
+
 def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=None):
     """
     Render the Churn Comparison tab with direct comparisons.
@@ -97,7 +113,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
             diff_pct = ((attrited_mean - existing_mean) / existing_mean * 100) if existing_mean != 0 else 0
 
             comparison_stats.append({
-                'Metric': metric.replace('_', ' ').title(),
+                'Metric': truncate_label(metric.replace('_', ' ').title()),
                 'Existing (Avg)': f"{existing_mean:.2f}",
                 'Attrited (Avg)': f"{attrited_mean:.2f}",
                 'Difference': f"{diff_pct:+.1f}%"
@@ -118,17 +134,24 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
         col1, col2 = st.columns([1, 3])
 
         with col1:
+            # Create display options with truncated labels
+            metric_options = available_metrics if available_metrics else numeric_cols[:10]
+            metric_display = {m: truncate_label(m.replace('_', ' ').title(), max_len=40) for m in metric_options}
+
             selected_metric = st.selectbox(
                 "Select Metric",
-                options=available_metrics if available_metrics else numeric_cols[:10],
+                options=metric_options,
+                format_func=lambda x: metric_display[x],
                 key="comparison_metric"
             )
 
         with col2:
-            st.markdown(f"**Comparing:** {selected_metric.replace('_', ' ').title()}")
+            st.markdown(f"**Comparing:** {truncate_label(selected_metric.replace('_', ' ').title(), max_len=50)}")
 
         # Create side-by-side visualizations
         col1, col2 = st.columns(2)
+
+        metric_label = truncate_label(selected_metric.replace('_', ' ').title())
 
         with col1:
             # Overlapping histograms
@@ -138,7 +161,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
                 color=churn_col,
                 color_discrete_map=churn_colors,
                 barmode='overlay',
-                title=f"{selected_metric.replace('_', ' ').title()} Distribution",
+                title=f"{metric_label} Distribution",
                 opacity=0.7,
                 nbins=30
             )
@@ -153,7 +176,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
                 y=selected_metric,
                 color=churn_col,
                 color_discrete_map=churn_colors,
-                title=f"{selected_metric.replace('_', ' ').title()} Box Plot",
+                title=f"{metric_label} Box Plot",
                 points=False  # Don't show individual points for clarity
             )
             fig.update_layout(height=400)
@@ -168,13 +191,19 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
     cat_cols = [c for c in cat_cols if c != churn_col][:5]  # Exclude churn column itself
 
     if cat_cols:
+        # Create display options with truncated labels
+        cat_display = {c: truncate_label(c.replace('_', ' ').title(), max_len=40) for c in cat_cols}
+
         selected_cat = st.selectbox(
             "Select Categorical Feature",
             options=cat_cols,
+            format_func=lambda x: cat_display[x],
             key="comparison_categorical"
         )
 
         col1, col2 = st.columns(2)
+
+        cat_label = truncate_label(selected_cat.replace('_', ' ').title())
 
         with col1:
             # Existing customers breakdown
@@ -182,7 +211,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
             fig = px.bar(
                 x=existing_counts.index,
                 y=existing_counts.values,
-                title=f"Existing Customers: {selected_cat.replace('_', ' ').title()}",
+                title=f"Existing Customers: {cat_label}",
                 labels={'x': selected_cat, 'y': 'Count'},
                 color_discrete_sequence=[churn_colors.get("Existing Customer", "#3498db") if churn_colors else "#3498db"]
             )
@@ -196,7 +225,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
             fig = px.bar(
                 x=attrited_counts.index,
                 y=attrited_counts.values,
-                title=f"Attrited Customers: {selected_cat.replace('_', ' ').title()}",
+                title=f"Attrited Customers: {cat_label}",
                 labels={'x': selected_cat, 'y': 'Count'},
                 color_discrete_sequence=[churn_colors.get("Attrited Customer", "#e67e22") if churn_colors else "#e67e22"]
             )
@@ -221,11 +250,14 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
         existing_scores = [existing[f].mean() for f in available_engineered]
         attrited_scores = [attrited[f].mean() for f in available_engineered]
 
+        # Truncate labels for radar chart
+        radar_labels = [truncate_label(f.replace('_', ' ').title(), max_len=25) for f in available_engineered]
+
         fig = go.Figure()
 
         fig.add_trace(go.Scatterpolar(
             r=existing_scores,
-            theta=[f.replace('_', ' ').title() for f in available_engineered],
+            theta=radar_labels,
             fill='toself',
             name='Existing Customers',
             line_color=churn_colors.get("Existing Customer", "#3498db") if churn_colors else "#3498db"
@@ -233,7 +265,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
 
         fig.add_trace(go.Scatterpolar(
             r=attrited_scores,
-            theta=[f.replace('_', ' ').title() for f in available_engineered],
+            theta=radar_labels,
             fill='toself',
             name='Attrited Customers',
             line_color=churn_colors.get("Attrited Customer", "#e67e22") if churn_colors else "#e67e22"
@@ -263,7 +295,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
             attrited_vals = attrited[metric].dropna()
 
             summary_data.append({
-                'Metric': metric.replace('_', ' ').title(),
+                'Metric': truncate_label(metric.replace('_', ' ').title()),
                 'Existing Mean': f"{existing_vals.mean():.2f}",
                 'Existing Median': f"{existing_vals.median():.2f}",
                 'Existing Std': f"{existing_vals.std():.2f}",
@@ -304,6 +336,7 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
 
                         differentiators.append({
                             'Feature': col.replace('_', ' ').title(),
+                            'Feature_Truncated': truncate_label(col.replace('_', ' ').title(), max_len=35),
                             'Effect Size': cohens_d,
                             'Existing Mean': existing_vals.mean(),
                             'Attrited Mean': attrited_vals.mean(),
@@ -313,14 +346,14 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
         if differentiators:
             diff_df = pd.DataFrame(differentiators).sort_values('Effect Size', ascending=False).head(10)
 
-            # Create bar chart of effect sizes
+            # Create bar chart of effect sizes with truncated labels
             fig = px.bar(
                 diff_df,
                 x='Effect Size',
-                y='Feature',
+                y='Feature_Truncated',
                 orientation='h',
                 title="Top 10 Features by Effect Size (Cohen's d)",
-                labels={'Effect Size': "Effect Size (Cohen's d)", 'Feature': ''},
+                labels={'Effect Size': "Effect Size (Cohen's d)", 'Feature_Truncated': ''},
                 color='Effect Size',
                 color_continuous_scale='RdYlGn_r'
             )
@@ -336,8 +369,9 @@ def render_churn_comparison_tab(full_df, filtered_df, churn_col, churn_colors=No
             Features with large effect sizes are the strongest predictors of churn.
             """)
 
-            # Show detailed table
-            display_df = diff_df[['Feature', 'Effect Size', 'Existing Mean', 'Attrited Mean', 'Difference %']].copy()
+            # Show detailed table with truncated labels
+            display_df = diff_df[['Feature_Truncated', 'Effect Size', 'Existing Mean', 'Attrited Mean', 'Difference %']].copy()
+            display_df = display_df.rename(columns={'Feature_Truncated': 'Feature'})
             display_df['Effect Size'] = display_df['Effect Size'].round(3)
             display_df['Existing Mean'] = display_df['Existing Mean'].round(2)
             display_df['Attrited Mean'] = display_df['Attrited Mean'].round(2)
