@@ -56,7 +56,7 @@ env/
 # IDEs and Editors
 # ============================================================================
 # VS Code
-.vscode/
+# .vscode/  # Committed to repo for pedagogical consistency
 *.code-workspace
 
 # PyCharm
