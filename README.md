@@ -42,6 +42,9 @@ This project demonstrates a streamlined data science workflow from raw data to i
 │   └── processed/         # Pipeline outputs (parquet files)
 │       ├── cleaned.parquet      # ETL output (27 columns)
 │       └── features.parquet     # Feature engineering output (44 columns)
+├── docs/                  # 📚 Technical documentation
+│   ├── engineered_features.md   # Feature engineering reference
+│   └── naive_bayes_exclusion_rationale.md  # Dataset decisions
 ├── src/
 │   ├── etl.py             # ETL pipeline script
 │   ├── features.py        # Feature engineering pipeline
@@ -102,6 +105,22 @@ make pipeline  # Runs ETL + feature engineering
 make etl       # python src/etl.py
 make features  # python src/features.py
 ```
+
+## Documentation
+
+This project includes detailed technical documentation in the `docs/` directory:
+
+### 📘 Feature Engineering Reference
+**[Engineered Features Documentation](docs/engineered_features.md)**
+- Comprehensive guide to all 17 synthetic features
+- Calculation formulas and interpretation guidelines
+- Business use cases and ML recommendations
+- Feature categories: RFM metrics, engagement scores, risk modeling, customer segmentation
+
+### 📋 Dataset Decisions
+**[Naive Bayes Exclusion Rationale](docs/naive_bayes_exclusion_rationale.md)**
+- Why synthetic Naive Bayes columns were excluded from analysis
+- Dataset integrity and domain knowledge considerations
 
 ## Data Pipeline
 
