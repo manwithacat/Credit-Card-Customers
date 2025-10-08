@@ -1,0 +1,97 @@
+"""
+Overview Tab - Dataset Summary and KPIs
+
+This module renders the Overview tab showing high-level metrics,
+data preview, and data type information.
+"""
+
+import streamlit as st
+import pandas as pd
+
+
+def render_overview_tab(filtered_df, churn_col):
+    """
+    Render the Overview tab with KPIs and data preview.
+
+    This tab provides a high-level view of the dataset including:
+    - Key metrics (customer count, features, churn rate)
+    - Sample data preview
+    - Data type information and missing value analysis
+
+    Args:
+        filtered_df (pd.DataFrame): The filtered dataset to display
+        churn_col (str): Name of the churn column for metrics
+    """
+    st.header("Dataset Overview")
+
+    # -------------------------------------------------------------------------
+    # METRICS ROW - Display key numbers across 4 columns
+    # -------------------------------------------------------------------------
+    # st.columns(4) splits the page width into 4 equal columns
+    # Think of it like a table row with 4 cells
+    col1, col2, col3, col4 = st.columns(4)
+
+    # Each "with colX:" puts content into that specific column
+    with col1:
+        # st.metric() displays a large number with a label - great for KPIs
+        st.metric("Total Customers", f"{len(filtered_df):,}")
+
+    with col2:
+        # .columns gives us the number of columns (features) in our dataframe
+        st.metric("Total Features", len(filtered_df.columns))
+
+    with col3:
+        if churn_col and churn_col in filtered_df.columns:
+            # .str.contains() searches for text within string values
+            # case=False means ignore capitalization
+            # na=False means treat missing values as False
+            # .sum() counts how many True values (rows with "Attrited")
+            churn_count = (
+                filtered_df[churn_col].str.contains("Attrited", case=False, na=False)
+            ).sum()
+            st.metric("Churned Customers", f"{churn_count:,}")
+        else:
+            st.metric("Churned Customers", "N/A")
+
+    with col4:
+        if churn_col and churn_col in filtered_df.columns:
+            # .mean() gives proportion of True values (0 to 1)
+            # * 100 converts to percentage
+            # :.1f formats as decimal with 1 place after decimal point
+            churn_rate = (
+                filtered_df[churn_col].str.contains("Attrited", case=False, na=False)
+            ).mean() * 100
+            st.metric("Churn Rate", f"{churn_rate:.1f}%")
+        else:
+            st.metric("Churn Rate", "N/A")
+
+    # -------------------------------------------------------------------------
+    # DATA PREVIEW - Show first 100 rows
+    # -------------------------------------------------------------------------
+    st.subheader("Sample Data")
+    # st.dataframe() creates an interactive table that users can scroll and sort
+    # .head(100) gets the first 100 rows
+    # use_container_width=True makes the table expand to fill available width
+    st.dataframe(filtered_df.head(100), use_container_width=True)
+
+    # -------------------------------------------------------------------------
+    # DATA TYPES TABLE - Show column info and missing values
+    # -------------------------------------------------------------------------
+    st.subheader("Data Types")
+    # Create a new DataFrame that summarizes information about our data
+    # This is a dictionary where keys become column names
+    dtype_df = pd.DataFrame(
+        {
+            "Column": filtered_df.dtypes.index,  # Column names
+            "Type": filtered_df.dtypes.values.astype(
+                str
+            ),  # Data types (int, float, object, etc.)
+            "Non-Null": filtered_df.count().values,  # Number of non-missing values
+            "Null %": (
+                (1 - filtered_df.count() / len(filtered_df)) * 100
+            )
+            .round(2)
+            .values,  # % missing
+        }
+    )
+    st.dataframe(dtype_df, use_container_width=True)
